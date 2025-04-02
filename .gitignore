@@ -1,0 +1,5 @@
+*.ipynb
+*.sh
+.venv/
+__pycache__/
+results/

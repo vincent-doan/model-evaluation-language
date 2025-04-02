@@ -1,0 +1,30 @@
+model:
+  bert-base-uncased:
+    num_epochs:
+      - 3
+      - 4
+      - 5
+    learning_rate:
+      - 0.00002
+      - 0.00003
+      - 0.00005
+    batch_size:
+      - 32
+    dropout_rate:
+      - 0.1
+      - 0.3
+  bert-large-uncased:
+    num_epochs:
+      - 3
+      - 4
+      - 5
+    learning_rate:
+      - 0.00002
+      - 0.00003
+      - 0.00005
+    batch_size:
+      - 32
+    dropout_rate:
+      - 0.1
+      - 0.3
+augmentation_multiplier: 1
