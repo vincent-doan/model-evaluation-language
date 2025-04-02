@@ -51,7 +51,7 @@ PARAMS = {
     "ag_news": {
         "train_set_size": 100,
         "test_set_size": 0,
-        "unlabelled_set_size": 10000,
+        "unlabelled_set_size": 50000,
         "seed": 2411,
         "num_classes": 4
     },

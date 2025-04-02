@@ -2,4 +2,5 @@
 *.sh
 .venv/
 __pycache__/
+archive/
 results/
