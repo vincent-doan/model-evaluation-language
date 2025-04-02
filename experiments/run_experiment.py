@@ -51,7 +51,7 @@ PARAMS = {
     "ag_news": {
         "train_set_size": 100,
         "test_set_size": 0,
-        "unlabelled_set_size": -1,
+        "unlabelled_set_size": 10000,
         "seed": 2411,
         "num_classes": 4
     },
@@ -159,7 +159,7 @@ def main():
         CACHED_FOLDER_PATH = f"results/{experiment_version}/{dataset_name}/{model_name}"
         os.makedirs(CACHED_FOLDER_PATH, exist_ok=True)
         CHECKPOINT_PATH = os.path.join(CACHED_FOLDER_PATH, "best_checkpoint.pth")
-        trained_model, best_train_accuracy, best_test_accuracy = train_model(model, train_loader, test_loader, device, num_epochs, learning_rate, CHECKPOINT_PATH)
+        trained_model, train_accuracy, test_accuracy = train_model(model, train_loader, test_loader, device, num_epochs, learning_rate, CHECKPOINT_PATH)
 
         # Group unlabelled data (using tokenized representations)
         TRAIN_LOGITS_PATH = os.path.join(CACHED_FOLDER_PATH, "cached_train_logits.npy")
@@ -182,10 +182,8 @@ def main():
             json.dump(grouping, f)
 
         # Compute custom metrics. (For our text task, custom metrics are computed similarly.)
-        train_loss, train_accuracy, test_loss, test_accuracy, distance, measure, _distance, _measure = compute_custom_metrics(
+        train_loss, distance, measure, _distance, _measure = compute_custom_metrics(
             cached_folder_path=f"results/{experiment_version}/{dataset_name}/{model_name}",
-            best_train_accuracy=best_train_accuracy,
-            best_test_accuracy=best_test_accuracy,
             grouping=grouping,
             device=device
         )
@@ -200,7 +198,6 @@ def main():
             "batch_size": batch_size,
             "train_loss": round(train_loss, 4),
             "train_accuracy": round(train_accuracy, 4),
-            "test_loss": round(test_loss, 4),
             "test_accuracy": round(test_accuracy, 4),
             "distance": round(distance, 4),
             "measure": round(measure, 4),
@@ -230,8 +227,7 @@ def main():
     results_df.to_csv(results_csv_path, index=False)
     print(f"Saved results to {results_csv_path}")
     print("Postprocessing experiment results...")
-    for metric_name in ["accuracy", "loss"]:
-        postprocess_results(metric_name, top_k=15, results_path=results_csv_path)
+    postprocess_results("accuracy", top_k=15, results_path=results_csv_path)
     print("Postprocessed output saved!")
 
 

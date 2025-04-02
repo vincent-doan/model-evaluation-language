@@ -25,7 +25,7 @@ def postprocess_results(gt_metric_name, top_k, results_path):
             return True
 
     # Sort based on loss-related metrics
-    loss_metrics = ["train_loss", "test_loss", "measure"]
+    loss_metrics = ["train_loss", "measure"]
     results = results.sort_values(
         by=loss_metrics,
         ascending=[get_sort_order(metric) for metric in loss_metrics],
@@ -41,7 +41,7 @@ def postprocess_results(gt_metric_name, top_k, results_path):
     ).reset_index(drop=True)
 
     # Create ranking columns based on various metrics.
-    metrics = ["train_loss", "train_accuracy", "test_loss", "test_accuracy", "measure"]
+    metrics = ["train_loss", "train_accuracy", "test_accuracy", "measure"]
     for metric in metrics:
         col_name = f"order_based_on_{metric}"
         results[col_name] = results[metric].rank(method='min', ascending=get_sort_order(metric)) - 1
