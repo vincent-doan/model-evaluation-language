@@ -49,9 +49,6 @@ MODEL_MAP = {
 # ------------------------------------------------------------------------
 PARAMS = {
     "ag_news": {
-        "train_set_size": 100,
-        "test_set_size": 0,
-        "unlabelled_set_size": 50000,
         "seed": 2411,
         "num_classes": 4
     },
@@ -69,6 +66,13 @@ def main():
                         help="Which model to use (overrides config.yml if provided).")
     parser.add_argument("--gpu_id", type=int, default=0,
                         help="Which GPU to use (default: 0).")
+    parser.add_argument("--train_set_size", type=int,
+                        help="Size of the training set.")
+    parser.add_argument("--test_set_size", type=int, default=0,
+                        help="Size of the test set.")
+    parser.add_argument("--unlabelled_set_size", type=int, default=-1,
+                        help="Size of the unlabelled set.")
+    
     args = parser.parse_args()
     
     # ===================================================================
@@ -109,9 +113,9 @@ def main():
         )
         dataset_obj.load()
         (X_train, y_train), (X_test, y_test), (X_unlabelled, y_unlabelled) = dataset_obj.preprocess(
-            train_set_size=PARAMS[dataset_name]["train_set_size"],
-            test_set_size=PARAMS[dataset_name]["test_set_size"],
-            unlabelled_set_size=PARAMS[dataset_name]["unlabelled_set_size"],
+            train_set_size=args.train_set_size,
+            test_set_size=args.test_set_size,
+            unlabelled_set_size=args.unlabelled_set_size,
             seed=PARAMS[dataset_name]["seed"]
         )
     else:
