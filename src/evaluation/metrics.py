@@ -39,7 +39,7 @@ def compute_custom_metrics(
         total_distance += in_cluster_distance * (len(member_ids) / unlabelled_set_size)
 
         # Actual measure: MAE loss on unlabelled members and centroid
-        centroid_loss = int(y_train[centroid_id].item() != centroid_probs.argmax())
+        centroid_loss = np.mean(np.abs(y_train_one_hot[centroid_id].cpu().numpy() - centroid_probs))
         y_unlabelled_one_hot = torch.nn.functional.one_hot(y_unlabelled[member_ids], num_classes=member_probs.shape[1]).cpu().numpy()
         member_loss = np.mean(np.abs(member_probs - y_unlabelled_one_hot), axis=1)
         _in_cluster_distance = np.sum(np.abs(member_loss - centroid_loss)) / len(member_ids)
