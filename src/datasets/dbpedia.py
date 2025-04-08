@@ -30,7 +30,7 @@ class DBpediaDataset(BaseDataset):
         We use the "content" field as the document and "label" as the class.
         """
         self.train_split = load_dataset("dbpedia_14", split="train").shuffle(seed=2411).select(range(50000))
-        self.test_split = load_dataset("dbpedia_14", split="test")
+        self.test_split = load_dataset("dbpedia_14", split="test").shuffle(seed=2411).select(range(20000))
         texts = self.train_split["content"]
         labels = self.train_split["label"]
         self.samples = np.array(texts)
