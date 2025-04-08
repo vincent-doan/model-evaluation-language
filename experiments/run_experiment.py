@@ -14,6 +14,8 @@ from torch.utils.data import DataLoader, TensorDataset
 # Import dataset classes
 # ------------------------------------------------------------------------
 from src.datasets.ag_news import AGNewsDataset
+from src.datasets.imdb import IMDBDataset
+from src.datasets.dbpedia import DBpediaDataset
 
 # ------------------------------------------------------------------------
 # Import model classes
@@ -36,7 +38,9 @@ from experiments.postprocess import postprocess_results
 # Registry / mapping from string to classes
 # ------------------------------------------------------------------------
 DATASET_MAP = {
-    "ag_news": AGNewsDataset
+    "ag_news": AGNewsDataset,
+    "imdb": IMDBDataset,
+    "dbpedia": DBpediaDataset
 }
 
 MODEL_MAP = {
@@ -52,7 +56,14 @@ PARAMS = {
         "seed": 2411,
         "num_classes": 4
     },
-    # -- Add other datasets here if needed --
+    "imdb": {
+        "seed": 2411,
+        "num_classes": 2
+    },
+    "dbpedia": {
+        "seed": 2411,
+        "num_classes": 14
+    }
 }
 
 
@@ -105,7 +116,7 @@ def main():
     # 2. Create dataset instance & load data
     # ===================================================================
     ds_class = DATASET_MAP[dataset_name]
-    if dataset_name == "ag_news":
+    if dataset_name in ["ag_news", "imdb", "dbpedia"]:
         dataset_obj = ds_class(
             data_dir="./data",
             download=True,
